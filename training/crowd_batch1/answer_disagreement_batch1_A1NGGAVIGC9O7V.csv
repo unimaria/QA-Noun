@@ -1,0 +1,20 @@
+sentence,predicate,predicted_property,predicted_question,predicted_answer
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",relation,outcome,What is the [PROPERTY] of (the) relation?,three counts of indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",complaints,nature,What is the [PROPERTY] of (the) complaints?,indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,,What/Who is a part/member of events?,three females
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,,What/Who is a part/member of events?,Hall
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,,What/Who is (the) events?,indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",females,,What is the females a part/member of?,indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",females,,When is the females?,between 1974 and 1984
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",years,,Whose years?,three females
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",counts,,Whose counts?,Hall
+Jenny cognitively assesses the snake in her presence .,snake,,Where is the snake?,her presence
+Jenny cognitively assesses the snake in her presence .,presence,,What/Who is (the) presence?,snake
+They do not prepare food and live only on what people offer them .,food,,What kind of food?,what people offer them
+They do not prepare food and live only on what people offer them .,people,property,What is the [PROPERTY] of (the) people?,food
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",members,,Whose members?,woman at Juanda
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,,What is the woman a part/member of?,family
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,recipient,What is the [PROPERTY] of (the) woman?,Antara
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,,What/Who is a part/member of film?,director
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,,What/Who is a part/member of film?,Stefan Ruzowitzky
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,director,honor,What is the [PROPERTY] of (the) director?,Academy Award

@@ -1,0 +1,6 @@
+sentence,predicate,predicted_property,predicted_question,predicted_answer
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",complaints,,What kind of complaints?,about alleged events between 1974 and 1984
+Jenny cognitively assesses the snake in her presence .,snake,,Where is the snake?,in her presence
+They do not prepare food and live only on what people offer them .,people,action,What is the [PROPERTY] of (the) people?,offer
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",family,,What/Who is a part/member of family?,Juanda
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,,What kind of film?,Austrian

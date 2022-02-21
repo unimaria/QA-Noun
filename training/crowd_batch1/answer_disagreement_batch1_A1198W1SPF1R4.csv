@@ -1,0 +1,29 @@
+sentence,predicate,predicted_property,predicted_question,predicted_answer
+"There are 16 H and 9 N subtypes known , but only H 1 , 2 and 3 , and N 1 and 2 are commonly found in humans .",subtypes,status,What is the [PROPERTY] of (the) subtypes?,known
+"There are 16 H and 9 N subtypes known , but only H 1 , 2 and 3 , and N 1 and 2 are commonly found in humans .",subtypes,,Where is the subtypes?,in humans
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",relation,,What kind of relation?,In
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",complaints,,What/Who is a part/member of complaints?,indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,,What/Who is a part/member of events?,three females between eight and seventeen years of age
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,defendant,What is the [PROPERTY] of (the) events?,Hall
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,nature,What is the [PROPERTY] of (the) events?,indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",females,mistreatment,What is the [PROPERTY] of (the) females?,indecent assault
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",age,,What/Who is a part/member of age?,years
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",indecent,,How much /How many indecent?,three counts
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",indecent,,Whose indecent?,Hall
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",indecent,consequence,What is the [PROPERTY] of (the) indecent?,being arrested
+Jenny cognitively assesses the snake in her presence .,snake,assesser,What is the [PROPERTY] of (the) snake?,Jenny
+Jenny cognitively assesses the snake in her presence .,presence,,Whose presence?,her
+They do not prepare food and live only on what people offer them .,food,,Whose food?,They
+They do not prepare food and live only on what people offer them .,food,provider,What is the [PROPERTY] of (the) food?,people
+They do not prepare food and live only on what people offer them .,people,action,What is the [PROPERTY] of (the) people?,offer
+They do not prepare food and live only on what people offer them .,people,donation,What is the [PROPERTY] of (the) people?,food
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",whereabouts,seeker,What is the [PROPERTY] of (the) whereabouts?,one weeping woman at Juanda
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",family,,Where is the family?,at Juanda
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",members,,What/Who is a part/member of members?,one weeping woman at Juanda
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,,What kind of woman?,weeping
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,,What is the woman a part/member of?,our family
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,action,What is the [PROPERTY] of (the) woman?,told Antara
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,origin,What is the [PROPERTY] of (the) film?,Austrian
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,,What kind of film?,The first
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,director,What is the [PROPERTY] of (the) film?,Stefan Ruzowitzky
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,director,achievement,What is the [PROPERTY] of (the) director?,receive an Academy Award

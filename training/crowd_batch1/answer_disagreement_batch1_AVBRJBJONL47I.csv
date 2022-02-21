@@ -1,0 +1,7 @@
+sentence,predicate,predicted_property,predicted_question,predicted_answer
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,,What/Who is a part/member of events?,three females between eight and seventeen years of age
+Jenny cognitively assesses the snake in her presence .,snake,,Where is the snake?,in her presence
+Jenny cognitively assesses the snake in her presence .,presence,,What/Who is a part/member of presence?,the snake
+They do not prepare food and live only on what people offer them .,food,,Whose food?,people
+They do not prepare food and live only on what people offer them .,people,offering,What is the [PROPERTY] of (the) people?,food
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,,Whose film?,Stefan Ruzowitzky

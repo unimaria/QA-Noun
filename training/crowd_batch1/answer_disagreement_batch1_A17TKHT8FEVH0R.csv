@@ -1,0 +1,15 @@
+sentence,predicate,predicted_property,predicted_question,predicted_answer
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",events,,What/Who is a part/member of events?,three females
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",females,,What is the females a part/member of?,complaints about alleged events between 1974 and 1984
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",females,relation,What is the [PROPERTY] of (the) females?,complaints about alleged events between 1974 and 1984
+"In relation to complaints about alleged events between 1974 and 1984 involving three females between eight and seventeen years of age , Hall was charged with three counts of indecent assault after being arrested Wednesday .",counts,,Whose counts?,Hall
+Jenny cognitively assesses the snake in her presence .,snake,,Where is the snake?,in her presence
+Jenny cognitively assesses the snake in her presence .,presence,,What/Who is (the) presence?,snake
+They do not prepare food and live only on what people offer them .,people,purpose,What is the [PROPERTY] of (the) people?,people offer them
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",members,,Whose members?,one weeping woman at Juanda
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",members,,What/Who is a part/member of members?,one weeping woman at Juanda
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,emotional state,What is the [PROPERTY] of (the) woman?,weeping
+"`` I hope I can get information soon on the whereabouts of our family members , '' one weeping woman at Juanda told Antara .",woman,,Whose woman?,weeping
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,,What kind of film?,Austrian
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,film,profession,What is the [PROPERTY] of (the) film?,director
+The first Austrian film director to receive an Academy Award was Stefan Ruzowitzky .,director,award,What is the [PROPERTY] of (the) director?,Academy Award
