@@ -5,7 +5,11 @@ import pandas as pd
 import itertools
 
 
-batch_results_file = "crowd_batch2/crowd_batch2_results.csv"
+'''
+This file is used to compare between workers of the same hit and calculate their accuracy, confusion matrix etc.
+'''
+
+batch_results_file = "../batches/crowd_batch5/crowd_batch5_results.csv"
 of_what_filename = "crowd_batch2/of_what_matches.txt"
 what_kind_vs_filename = "crowd_batch2/what_kind_vs_consist_and_part.txt"
 test_sll_same_file = "crowd_batch/test_accuracy_all_same.csv"
@@ -13,10 +17,9 @@ lab_batch_results_file = "lab_batch/batch_results_after_fix.csv"
 
 QUESTIONS_DICT = {1: "What is the [PROPERTY] of (the) [W]?", 2: "Whose [W]?", 3: "Where is the [W]?",
                   4: "How much /How many [W]?",
-                  5: "What is (the) [W] part of?", 6: "Who/What does [W] consist of?",
-                  7: "Which entity/organization does the [W] belong to?", 8: "What/Who is (the) [W]?",
-                  9: "What kind of [W]?",
-                  10: "[W] of what?"}
+                  5: "What is the [W] a part/member of?", 6: "What/Who is a part/member of [W]?",
+                  7: "What/Who is (the) [W]?",
+                  8: "What kind of [W]?", 9: "When is the [W]?"}
 
 
 class AccuracyCalculator:
@@ -49,12 +52,15 @@ class AccuracyCalculator:
     def parser_json_answer(json_answer, sentence, index, sentenceid):
         json_answer_loaded = json.loads(json_answer)[0]
         questions_answers_dict = {"questions": dict(), "answers": dict(), "properties": dict(),
-                                                        "sentenceid": sentenceid, "sentence": sentence, "index": index}
+                                                        "sentenceid": sentenceid, "sentence": sentence, "index": index,
+                                  "start_indices": dict(), "end_indices": dict()}
         question_id_max = len(json_answer_loaded)
         for i in range(question_id_max):
             if "question-" + str(i) in json_answer_loaded:
                 questions_answers_dict["questions"][i] = json_answer_loaded["question-" + str(i)]
                 questions_answers_dict["answers"][i] = json_answer_loaded["answers-" + str(i)]
+                questions_answers_dict["start_indices"][i] = int(json_answer_loaded["start-" + str(i)])
+                questions_answers_dict["end_indices"][i] = int(json_answer_loaded["end-" + str(i)])
             if "question-" + str(i) + "-property-input" in json_answer_loaded:
                 questions_answers_dict["properties"][i] = json_answer_loaded["question-" + str(i) + "-property-input"]
         return questions_answers_dict
@@ -152,6 +158,9 @@ class AccuracyCalculator:
         return [questions_tp, questions_fp, questions_fn], [answers_tp, answers_fp, answers_fn]
 
     def calculate_answer_accuracy_for_two_workers_for_one_hit(self, worker_id1, worker_id2, curr_hit_dict, hit_id):
+        # recall = tp / (fn + tp)
+        # precision = tp / (tp + fp)
+        # f1 = (2 * tp) / ((2 * tp) + fp + fn)
         num_matching_answers = 0
         gold = curr_hit_dict[worker_id1]
         predicted = curr_hit_dict[worker_id2]
@@ -169,9 +178,6 @@ class AccuracyCalculator:
         fp = (len(predicted_answers) - num_matching_answers)
         fn = len(gold_answers) - num_matching_answers
         return tp, fp, fn
-        # recall = tp / (fn + tp)
-        # precision = tp / (tp + fp)
-        # f1 = (2 * tp) / ((2 * tp) + fp + fn)
 
     def print_answers_without_match(self):
         print("\nAnswers without match:\n")
@@ -192,16 +198,32 @@ class AccuracyCalculator:
         answer2_words = set(answer2.split(" "))
         return len(answer1_words.intersection(answer2_words)) / len(answer1_words.union(answer2_words))
 
+    def evaluate_answer_match_rate_with_indices(self, answer1_start, answer2_start, answer1_end, answer2_end):
+        answer1_indices = set(range(answer1_start, answer1_end + 1))
+        answer2_indices = set(range(answer2_start, answer2_end + 1))
+        return len(answer1_indices.intersection(answer2_indices)) / len(answer1_indices.union(answer2_indices))
+
     def calculate_answer_matches_for_two_workers_for_hit(self, worker_id1, worker_id2, curr_hit_dict):
         gold = curr_hit_dict[worker_id1]
         predicted = curr_hit_dict[worker_id2]
         gold_answers = gold["answers"]
         predicted_answers = predicted["answers"]
+        gold_answer_starts = gold["start_indices"]
+        gold_answer_ends = gold["end_indices"]
+        predicted_answer_starts = predicted["start_indices"]
+        predicted_answer_ends = predicted["end_indices"]
         answer_matches = defaultdict(list)
         for answer1_id in gold_answers:
             for answer2_id in predicted_answers:
-                if self.evaluate_answer_match_rate(gold_answers[answer1_id], predicted_answers[answer2_id]) >= 0.5:
-                    answer_matches[answer1_id].append(answer2_id)
+                index_eval = self.evaluate_answer_match_rate_with_indices(gold_answer_starts[answer1_id],
+                                                predicted_answer_starts[answer2_id], gold_answer_ends[answer1_id],
+                                                predicted_answer_ends[answer2_id])
+                string_eval = self.evaluate_answer_match_rate(gold_answers[answer1_id], predicted_answers[answer2_id])
+                if string_eval >= 0.5:
+                    if index_eval:
+                        answer_matches[answer1_id].append(answer2_id)
+                    else:
+                        print('hi')
         return answer_matches
 
     def calculate_question_by_answer_accuracy_for_two_workers_for_hit(self, worker_id1, worker_id2, curr_hit_dict):
@@ -419,28 +441,15 @@ class AccuracyCalculator:
         score_df.to_csv(self.worker_score_filename, index=False)
 
 
-# accuracy_calculator = AccuracyCalculator(batch_results_file, "crowd_batch/confusion_matrix_crowd.csv")
-# accuracy_calculator.calculate_accuracy_for_all_hits()
-# accuracy_calculator.print_answers_without_match()
-# accuracy_calculator.create_csv_from_confusion_matrix()
-
-# test_all_same = AccuracyCalculator(test_sll_same_file)
-# test_all_same.calculate_accuracy_for_all_hits()
-
-# lab_batch = AccuracyCalculator(lab_batch_results_file, "lab_batch/confusion_matrix_lab_batch.csv")
-# lab_batch.calculate_accuracy_for_all_hits()
-# lab_batch.create_csv_from_confusion_matrix()
-
-accuracy_calculator2 = AccuracyCalculator(batch_results_file, "crowd_batch2/confusion_matrix_crowd.csv", "crowd_batch2/workers_score.csv")
-accuracy_calculator2.calculate_accuracy_for_all_hits()
-# accuracy_calculator2.create_worker_score_dataframe()
-# accuracy_calculator2.calculate_score_for_all_workers()
-accuracy_calculator2.print_worker_statistics()
-# accuracy_calculator2.print_property_statistics()
-# accuracy_calculator2.print_property_pairs()
-# accuracy_calculator2.print_answers_without_match()
-# accuracy_calculator2.create_csv_from_confusion_matrix()
-
-# accuracy_calculator_test = AccuracyCalculator("crowd_batch2/test/crowd_batch2_results_test.csv", "crowd_batch2/test/confusion_matrix_crowd.csv")
-# accuracy_calculator_test.calculate_accuracy_for_all_hits()
-# accuracy_calculator_test.print_answers_without_match()
+'''
+Usage example: run each of these function for the wanted results
+'''
+# accuracy_calculator5 = AccuracyCalculator(batch_results_file, "../batches/crowd_batch5/confusion_matrix_crowd5.csv", "../batches/crowd_batch5/workers_score5.csv")
+# accuracy_calculator5.calculate_accuracy_for_all_hits()
+# accuracy_calculator5.create_worker_score_dataframe()
+# accuracy_calculator5.calculate_score_for_all_workers()
+# accuracy_calculator5.print_worker_statistics()
+# accuracy_calculator5.print_property_statistics()
+# accuracy_calculator5.print_property_pairs()
+# accuracy_calculator5.print_answers_without_match()
+# accuracy_calculator5.create_csv_from_confusion_matrix()
