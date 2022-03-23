@@ -521,7 +521,7 @@ function toggle(elementId) {
 
 const allForms = []
 
-function ןsaveForm() {
+function saveForm() {
     const form = document.querySelector("form");
     allForms.push($(form).serialize())
 
@@ -1492,25 +1492,37 @@ examplesHeader.querySelector("li").className = "active";
 
 
 <script>
-    // const sentence = 'My head\'s width of five inches.';
+    
+    // *** Examples for debug & test: *****
+
+    const sentence = 'My head\'s width of five inches.';
+    const i1 = 2;
+    const verb_indices = []
+    // const prep = '';
+
     // const sentence = "`` We will not go over a certain level , '' said David N. McCammon , Ford \'s vice president for finance , at a news conference yesterday in Dearborn , Mich . ";
-    // const sentence = 'Air density decreases .'
-    // const sentence = 'Air pressure is defined as the weight of the air pressing against a given area .';
     // const i1 = 19;
-    // const i1 = 1;
-    // const i1 = 14;
-    // const verb_indices = [3,13]
-    // const verb_indices = []
     // const verb_indices = '4&11  '.split('&');
     // const prep = 'for';
-    const i2 = '8';
 
-    const sentence = "${sentence}";
-    const i1 = Number('${index}');
-    const verb_indices = "${verbIndices}".split('&');
+    // const sentence = 'Air density decreases .'
+    // const i1 = 1;
     // const verb_indices = ['']
+
+    // const sentence = 'Air pressure is defined as the weight of the air pressing against a given area .';
+    // const i1 = 14;
+    // const verb_indices = [3,13]
+    // const prep = '';
+
+    
+    // **** The fields as should be in production -- replaced with values from CSV by MTurk ***
+
+    // const sentence = "${sentence}";
+    // const i1 = Number('${index}');
+    // const verb_indices = "${verbIndices}".split('&');
+    
     // const prep = "${prep}";
-    const prep = '';
+    const prep = "";
 
 </script>
 <script>

@@ -17,29 +17,36 @@ QUESTIONS_DICT = {1: "What is the [PROPERTY] of (the) [W]?", 2: "Whose [W]?", 3:
 
 
 class FeedbackCalculator:
-    def __init__(self, results_file, expert_file, worker_score_filename, question_disagreement_template, answer_csv_template):
-        self.batch_results_file = results_file
-        self.results_df = pd.read_csv(self.batch_results_file)
-        self.expert_results_file = expert_file
-        self.expert_df = pd.read_csv(self.expert_results_file)
+    def __init__(self, results_file, expert_file, workers_score_output_fn, workers_mistakes_output_fn):
+        self.workers_annot_file = results_file
+        self.expert_annot_file = expert_file
+        self.workers_score_output_fn = workers_score_output_fn
+        self.workers_mistakes_output_fn = workers_mistakes_output_fn
+        
+        self.workers_annot_df = self.read_annot_csv(self.workers_annot_file)
+        self.expert_annot_df = self.read_annot_csv(self.expert_annot_file)
         self.dict_by_worker = self.create_dictionary_by_worker()
         self.expert_dict = self.create_expert_dictionary_by_instance()
-        self.worker_score_filename = worker_score_filename
-        self.answer_csv_template = answer_csv_template
-        self.question_disagreement_template = question_disagreement_template
+
+    @staticmethod
+    def read_annot_csv(csv_fn: str) -> pd.DataFrame:
+        df = pd.read_csv(csv_fn)
+        # set 'instance_id' column - unique identifier per instance ("HIT", predicate)
+        df['instance_id'] = df.apply(lambda r: f"{r['Input.sentenceId']}_{r['Input.index']}", axis=1)
+        return df
 
     def create_dictionary_by_worker(self):
         workers_dict = dict()
-        workers = self.results_df["WorkerId"].unique()
+        workers = self.workers_annot_df["WorkerId"].unique()
         for worker_id in workers:
             workers_dict[worker_id] = self.create_answers_dict_for_each_worker(worker_id)
         return workers_dict
 
     def create_expert_dictionary_by_instance(self):
         expert_dict = dict()
-        sentence_ids = self.expert_df["Input.sentenceId"].unique()
+        sentence_ids = self.expert_annot_df["Input.sentenceId"].unique()
         for sentence_id in sentence_ids:
-            sentence_id_df = self.expert_df[self.expert_df["Input.sentenceId"] == sentence_id]
+            sentence_id_df = self.expert_annot_df[self.expert_annot_df["Input.sentenceId"] == sentence_id]
             word_indices = sentence_id_df["Input.index"].unique()
             for word_index in word_indices:
                 instance_df = sentence_id_df[sentence_id_df["Input.index"] == word_index]
@@ -60,7 +67,7 @@ class FeedbackCalculator:
 
     def create_answers_dict_for_each_worker(self, worker_id):
         answers_dict = dict()
-        filtered_df = self.results_df[self.results_df["WorkerId"] == worker_id]
+        filtered_df = self.workers_annot_df[self.workers_annot_df["WorkerId"] == worker_id]
         df_for_hit = filtered_df[["HITId", "Input.sentenceId", "Answer.taskAnswers", "Input.sentence", "Input.index"]]
         for index, row in df_for_hit.iterrows():
             instance_key = self.create_instance_key(row["Input.sentenceId"], row["Input.index"])
@@ -193,14 +200,14 @@ class FeedbackCalculator:
         return tp, fp, fn
 
     def create_question_disagreement_dataframe(self):
-        worker_ids = self.results_df["WorkerId"].unique()
+        worker_ids = self.workers_annot_df["WorkerId"].unique()
         for worker_id in worker_ids:
             df = pd.DataFrame([], columns=['sentence', "predicate", 'expert_worker_id',"gold_property",  'gold_question', 'gold_answer',
                                            "predicted_property", "predicted_question", "predicted_answer"])
             df.to_csv(self.question_disagreement_template.format(worker_id), index=False, encoding="utf-8")
 
     def create_answer_csv_dataframe(self):
-        worker_ids = self.results_df["WorkerId"].unique()
+        worker_ids = self.workers_annot_df["WorkerId"].unique()
         for worker_id in worker_ids:
             df = pd.DataFrame([], columns=['sentence', "predicate", 'expert_worker_id', "gold_property", 'gold_question',
                                        'gold_answer', "predicted_property", "predicted_question", "predicted_answer"])
@@ -289,12 +296,12 @@ class FeedbackCalculator:
         return len(answer1_indices.intersection(answer2_indices)) / len(answer1_indices.union(answer2_indices))
 
     def create_worker_score_dataframe(self):
-        worker_ids = self.results_df["WorkerId"].unique()
+        worker_ids = self.workers_annot_df["WorkerId"].unique()
         df = pd.DataFrame([], columns=['worker_id', 'recall', 'precision', 'f1',
                                        'question_recall', 'question_precision', 'question_f1',
                                        "num_hits", "avg_qa_per_hit"])
         df['worker_id'] = worker_ids
-        df.to_csv(self.worker_score_filename, index=False, encoding="utf-8")
+        df.to_csv(self.workers_score_output_fn, index=False, encoding="utf-8")
 
     def add_workers_question_accuracy_to_df(self, worker_ids, score_df):
         for worker_id in worker_ids:
@@ -330,15 +337,15 @@ class FeedbackCalculator:
         self.create_worker_score_dataframe()
         self.create_question_disagreement_dataframe()
         self.create_answer_csv_dataframe()
-        score_df = pd.read_csv(self.worker_score_filename)
-        worker_ids = self.results_df["WorkerId"].unique()
+        score_df = pd.read_csv(self.workers_score_output_fn)
+        worker_ids = self.workers_annot_df["WorkerId"].unique()
         self.add_workers_answer_accuracy_to_df(worker_ids, score_df)
         self.add_workers_question_accuracy_to_df(worker_ids, score_df)
         self.add_worker_statistics(worker_ids, score_df)
-        score_df.to_csv(self.worker_score_filename, index=False)
+        score_df.to_csv(self.workers_score_output_fn, index=False)
 
     def add_worker_statistics(self, worker_ids, score_df):
-        results_df = pd.read_csv(self.batch_results_file)
+        results_df = pd.read_csv(self.workers_annot_file)
         num_hits_per_worker = dict()
         num_qas_per_worker = defaultdict(int)
         num_qas_per_hit_per_worker = dict()
@@ -383,12 +390,24 @@ class FeedbackCalculator:
 '''
 Usage example: need to specify all paths and run the function that creates all the analysis files
 '''
+batch = "batch1"
+# input files
+batch_results_file = f"training/crowd_{batch}/crowd_{batch}_results.csv"
+expert_results_file = f"training/crowd_{batch}/expert_{batch}_results.csv"
+# output files
+workers_score_output_fn = f"training/crowd_{batch}/worker_score_{batch}.csv"
+workers_mistakes_output_fn = f"training/crowd_{batch}/worker_mistakes_{batch}.csv"
 
-batch_results_file = "../batches/training/crowd_batch1/crowd_batch1_results.csv"
-expert_results_file = "../batches/training/crowd_batch1/expert_batch1_results.csv"
-worker_score_filename = "../batches/training/crowd_batch1/worker_score_batch1.csv"
-question_disagreement_template = '../batches/training/crowd_batch1/question_disagreement_batch1_{}.csv'
-answer_csv_template = '../batches/training/crowd_batch1/batch1_report_{}.csv'
-feedback_calculator1 = FeedbackCalculator(batch_results_file, expert_results_file, worker_score_filename,
-                                          question_disagreement_template, answer_csv_template)
+feedback_calculator1 = FeedbackCalculator(batch_results_file, expert_results_file, 
+                                          workers_score_output_fn, workers_mistakes_output_fn)
 feedback_calculator1.calculate_score_for_all_workers()
+
+"""
+Ayal Task:
+  Given the expert annotation (Ayal's) and the worker annotations, produce a readable csv with all the disagreement data (both answer disagreement and question disagreement).
+
+We will manually inspect this csv after every training batch, annotate it with "reject/accept" boolean column (is it really an annotation mistake?) and another "comment" column.
+
+Paul Task:
+given the above CSV, produce a report in docx format for each worker. 
+"""

@@ -1,8 +1,8 @@
 import pandas as pd
 from datetime import timedelta
 from statistics import median
-from create_csv import process_file, preprocess_csv, preprocess_json, tqa_file_path, wiki_file_path, wikinews_file_path
-from create_readable_csv_batches import QANounCSVCreator
+from create_csv_for_mturk_batch import process_file, preprocess_csv, preprocess_json, tqa_file_path, wiki_file_path, wikinews_file_path
+from create_readable_csv_batches import RawCSVReader
 
 target_folder_path = "../expenses/dataset_statistics"
 NUM_SENTENCES = 200
@@ -53,7 +53,7 @@ def count_sentences_to_instances_ratio_without_creation():
 
 
 def count_question_to_assignments_ratio(batch_result_file):
-    readable_creator = QANounCSVCreator(batch_result_file, target_folder_path + "/readable_batch_csv.csv")
+    readable_creator = RawCSVReader(batch_result_file, target_folder_path + "/readable_batch_csv.csv")
     readable_creator.create_readable_csv()
     hits_df = pd.read_csv(batch_result_file)
     questions_df = pd.read_csv(target_folder_path + "/readable_batch_csv.csv")
