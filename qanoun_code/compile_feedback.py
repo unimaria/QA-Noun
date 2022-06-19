@@ -31,6 +31,14 @@ def insertHR(paragraph):
     pBdr.append(bottom)
 
 
+def add_feedback_column(mistake_row, document, style):
+    feedback = mistake_row['Feedback']
+    if str(feedback) != 'nan' and str(feedback) != 'v':
+        document.add_paragraph(style=style).add_run("Our feedback:")
+        document.add_paragraph(style=style).add_run(feedback)
+        document.add_paragraph(style=style).add_run("")
+
+
 def compile_feedback_for_instance(items, document):
     # sentence,sentence_id,target_idx,instance_id,target,
     # worker_id, general_comment, question_template_worker, question_worker, answer_worker, answer_range_worker, property_worker, comment_worker,
@@ -38,11 +46,12 @@ def compile_feedback_for_instance(items, document):
     calibri_no_space = document.styles['Calibri No Spacing']
     sentence = items[0]['sentence']
     tokens = sentence.split()
-    target_idx = items[0]['target_idx']
+    target_idx = int(items[0]['target_idx'])
     your_par = document.add_paragraph()
     your_par.style = "List Paragraph"
     tnr_name = "Times New Roman"
     tnr = document.styles['List Bullet - Times New Roman']
+
 
     your_par.add_run(" ".join(tokens[:target_idx])).font.name = tnr_name
     target_run = your_par.add_run(" " + tokens[target_idx] + " ")
@@ -60,6 +69,8 @@ def compile_feedback_for_instance(items, document):
         for miss in missed:
             missed_qa = f"{miss['question_expert']} --- {miss['answer_expert']}"
             document.add_paragraph(style=tnr).add_run(missed_qa)
+            add_feedback_column(miss, document, calibri_no_space)
+
     error = [item for item in items if not item['answer_expert'] and item['answer_worker']]
     if error:
         err_p = document.add_paragraph(style=calibri_no_space)
@@ -71,10 +82,21 @@ def compile_feedback_for_instance(items, document):
         for err in error:
             err_qa = f"{err['question_worker']} --- {err['answer_worker']}"
             document.add_paragraph(err_qa, style=tnr)
+            add_feedback_column(err, document, calibri_no_space)
 
     qs_mismatch = [item for item in items if item['answer_expert'] and item['answer_worker']]
     qs_mismatch = [item for item in qs_mismatch if item['question_expert'] != item['question_worker']]
-    # if qs_mismatch:
+    if qs_mismatch:
+        q_paragraph = document.add_paragraph(style=calibri_no_space)
+        q_paragraph.add_run("You have a ")
+        q_word = q_paragraph.add_run("question mismatch ")
+        q_word.font.color.rgb = RGBColor(255, 0, 0)
+        q_paragraph.add_run("with the expert in the following question-answer pairs: ")
+        for q in qs_mismatch:
+            q_mismatch = f"Your QA: {q['question_worker']} --- {q['answer_worker']}\n" \
+                         f"Expert's QA: {q['question_expert']} --- {q['answer_expert']}"
+            document.add_paragraph(q_mismatch, style=tnr)
+            add_feedback_column(q, document, calibri_no_space)
 
     insertHR(document.add_paragraph())
 
@@ -101,7 +123,7 @@ def compile_feedback(worker_id, worker_df):
         "This document is to help you understand "
         "some problems we have encountered while evaluating your recent work. "
         "Please read through these examples carefully to help you achieve the desired annotation "
-        "requirements for this task. Workers that would complete succesfully this short training round "
+        "requirements for this task. Workers that would complete successfully this short training round "
         "will be qualified to work on large batches of this task."
     )
     p.style = calibri
@@ -133,6 +155,8 @@ def main(args):
 
 if __name__ == "__main__":
     ap = ArgumentParser()
-    ap.add_argument("--in_path", default="annot_vs_expert.csv")
-    ap.add_argument("--out_dir", default="../training/feedback")
+    # ap.add_argument("--in_path", default="annot_vs_expert.csv")
+    # ap.add_argument("--out_dir", default="../training/feedback")
+    ap.add_argument("--in_path", default="../../qanoun_share/with_feedback_column/worker_mistakes_batch1.csv")
+    ap.add_argument("--out_dir", default="../../qanoun_share/with_feedback_column")
     main(ap.parse_args())
