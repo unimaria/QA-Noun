@@ -6,6 +6,7 @@ from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Inches, RGBColor
 from docx.oxml.shared import OxmlElement
 from docx.oxml.ns import qn
+import math
 
 
 
@@ -51,6 +52,11 @@ def compile_feedback_for_instance(items, document):
     your_par.style = "List Paragraph"
     tnr_name = "Times New Roman"
     tnr = document.styles['List Bullet - Times New Roman']
+
+    # this function does nothing if there are no feedbacks for the instance
+    if [pd.isna(item['Feedback']) for item in items] == len([pd.isna(item['Feedback']) for item in items]) * [True]:
+        return
+    #if all(len(line['feedback']) == 0 for line in items)
 
 
     your_par.add_run(" ".join(tokens[:target_idx])).font.name = tnr_name
@@ -158,5 +164,5 @@ if __name__ == "__main__":
     # ap.add_argument("--in_path", default="annot_vs_expert.csv")
     # ap.add_argument("--out_dir", default="../training/feedback")
     ap.add_argument("--in_path", default="../../qanoun_share/with_feedback_column/worker_mistakes_batch1.csv")
-    ap.add_argument("--out_dir", default="../../qanoun_share/with_feedback_column")
+    ap.add_argument("--out_dir", default="../../qanoun_share/with_feedback_column/test1")
     main(ap.parse_args())
