@@ -9,12 +9,6 @@ import itertools
 This file is used to compare between workers of the same hit and calculate their accuracy, confusion matrix etc.
 '''
 
-batch_results_file = "../batches/crowd_batch5/crowd_batch5_results.csv"
-of_what_filename = "crowd_batch2/of_what_matches.txt"
-what_kind_vs_filename = "crowd_batch2/what_kind_vs_consist_and_part.txt"
-test_sll_same_file = "crowd_batch/test_accuracy_all_same.csv"
-lab_batch_results_file = "lab_batch/batch_results_after_fix.csv"
-
 QUESTIONS_DICT = {1: "What is the [PROPERTY] of (the) [W]?", 2: "Whose [W]?", 3: "Where is the [W]?",
                   4: "How much /How many [W]?",
                   5: "What is the [W] a part/member of?", 6: "What/Who is a part/member of [W]?",
@@ -444,12 +438,21 @@ class AccuracyCalculator:
 '''
 Usage example: run each of these function for the wanted results
 '''
-# accuracy_calculator5 = AccuracyCalculator(batch_results_file, "../batches/crowd_batch5/confusion_matrix_crowd5.csv", "../batches/crowd_batch5/workers_score5.csv")
-# accuracy_calculator5.calculate_accuracy_for_all_hits()
-# accuracy_calculator5.create_worker_score_dataframe()
-# accuracy_calculator5.calculate_score_for_all_workers()
-# accuracy_calculator5.print_worker_statistics()
-# accuracy_calculator5.print_property_statistics()
-# accuracy_calculator5.print_property_pairs()
-# accuracy_calculator5.print_answers_without_match()
-# accuracy_calculator5.create_csv_from_confusion_matrix()
+if __name__ == "__main__":
+    batch = "batch2"
+    # input files
+    batch_results_file = f"../training/{batch}/crowd_{batch}_annot.csv"
+    expert_results_file = f"../training/{batch}/expert_{batch}_annot.csv"
+    # output files
+    confusion_matrix_path = f"../training/{batch}/confusion_matrix_{batch}.csv"
+    workers_score_output_fn = f"../training/{batch}/worker_score_{batch}.csv"
+
+    accuracy_calculator2 = AccuracyCalculator(batch_results_file, confusion_matrix_path, workers_score_output_fn)
+    accuracy_calculator2.calculate_accuracy_for_all_hits()
+    accuracy_calculator2.create_worker_score_dataframe()
+    accuracy_calculator2.calculate_score_for_all_workers()
+    accuracy_calculator2.print_worker_statistics()
+    accuracy_calculator2.print_property_statistics()
+    accuracy_calculator2.print_property_pairs()
+    accuracy_calculator2.print_answers_without_match()
+    accuracy_calculator2.create_csv_from_confusion_matrix()

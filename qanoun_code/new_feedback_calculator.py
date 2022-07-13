@@ -3,8 +3,8 @@ import pandas as pd
 import math
 import json
 
-from qanoun_code.metrics import ManyToOneMetrics
-from qanoun_code.create_readable_csv_batches import RawCSVReader
+from metrics import ManyToOneMetrics
+from create_readable_csv_batches import RawCSVReader
 
 '''
 This file creates feedback files for each worker in a batch, in comparison to the expert batch. 
@@ -323,13 +323,13 @@ class NewFeedbackCalculator:
 Usage example: need to specify all paths and run the function that creates all the analysis files
 '''
 if __name__ == "__main__":
-    batch = "batch1"
+    batch = "batch2"
     # input files
-    batch_results_file = f"training/crowd_{batch}/crowd_{batch}_results.csv"
-    expert_results_file = f"training/crowd_{batch}/expert_{batch}_results.csv"
+    batch_results_file = f"../training/{batch}/crowd_{batch}_annot.csv"
+    expert_results_file = f"../training/{batch}/expert_{batch}_annot.csv"
     # output files
-    workers_score_output_fn = f"training/crowd_{batch}/worker_score_{batch}.csv"
-    workers_mistakes_output_fn = f"training/crowd_{batch}/worker_mistakes_{batch}.csv"
+    workers_score_output_fn = f"../training/{batch}/worker_score_{batch}.csv"
+    workers_mistakes_output_fn = f"../training/{batch}/worker_mistakes_{batch}.csv"
 
     feedback_calculator1 = NewFeedbackCalculator(batch_results_file, expert_results_file, 
                                             workers_score_output_fn, workers_mistakes_output_fn)

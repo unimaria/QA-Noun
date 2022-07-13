@@ -163,6 +163,6 @@ if __name__ == "__main__":
     ap = ArgumentParser()
     # ap.add_argument("--in_path", default="annot_vs_expert.csv")
     # ap.add_argument("--out_dir", default="../training/feedback")
-    ap.add_argument("--in_path", default="../../qanoun_share/with_feedback_column/worker_mistakes_batch1.csv")
-    ap.add_argument("--out_dir", default="../../qanoun_share/with_feedback_column/test1")
+    ap.add_argument("--in_path", default="../training/batch2/worker_mistakes_batch2_feedback.csv")
+    ap.add_argument("--out_dir", default="../training/batch2/feedbacks")
     main(ap.parse_args())
